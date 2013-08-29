@@ -65,7 +65,7 @@ init:function() {
 
     //GAME.platforms.push(new GAME.Button({x:500, y:-200, z:0, width:100, height:40, dWidth:100, dHeight:512, map:GAME.Textures['background'].threeObj, color:0xFFFFFF, velocityX:0, velocityY:0, pathLength:0, front:true  }));
                                                                         //GAME.Platform = function(geometry, material, x, y, z, width, height, dWidth, dHeight, map, color, velocityX, velocityY, pathLength, front)
-    GAME.platforms.push(new GAME.Platform({x:-500, y:100, z:10, width:10240, height:32,color:0x00FFFF, velocityX:0, velocityY:0, pathLength:0}));
+    GAME.platforms.push(new GAME.Platform({x:-500, y:100, z:10, width:1780, height:32,color:0x00FFFF, velocityX:0, velocityY:0, pathLength:0}));
     //GAME.platforms.push(new GAME.Button({destination: GAME.artWork, x:-600, y:150, z:0, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:2, pathLength:100}));
     GAME.platforms.push(new GAME.Button({trigger:null, x:-600, y:150, z:10, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:2, pathLength:100}));
    
@@ -109,7 +109,12 @@ console.log("here");
     GAME.platforms.push(new GAME.Button({x:900, y:1150, z:10, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:0, pathLength:0})); 
     GAME.decorations.push( new GAME.Decoration({ x:0, y:100, z:-10, width:1280, height:1720, color:0x000000, threeD:false }));
     GAME.decorations.push( new GAME.Decoration({map:GAME.Textures['resume'].threeObj, x:1400, y:100, z:-10, width:1024, height:1024, color:0xFFFFFF, threeD:false }));
-       
+       GAME.decorations.push( new GAME.Decoration({ x:1400, y:100, z:-15, width:1024, height:1024, color:0xFFFFFF, threeD:false }));
+    GAME.flashlight = function(){
+        light.position.z = 30;
+    }
+    GAME.platforms.push(new GAME.Button({trigger: GAME.flashlight, x:1280, y:100, z:10, width:1280, height:32,color:0x00FF00, velocityX:0, velocityY:0, pathLength:0}));
+    
      
 
 

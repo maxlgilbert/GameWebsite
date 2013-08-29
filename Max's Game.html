@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Max's Game</title>
+		<meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+                <style>
+                    body {
+                        font-family: Monospace;
+                        background-color: #FFFFFF;
+                        margin: 0px;
+                        overflow: hidden;
+                    }
+                    </style>
+                </head>
+	<body>
+        
+		<script src="lib/three 2.js"></script>
+		<script src="lib/Stats.js"></script>
+		<script src="lib/Tween.js"></script>
+        <script src="SiteObject.js"></script>
+        <script src="ParticleEmitter.js"></script>
+        <script src="Player.js"></script>
+        <script src="Physics.js"></script>
+        <script src="Decoration.js"></script>
+        <script src="Picture.js"></script>
+        <script src="Platform.js"></script>
+        <script src="Button.js"></script>
+        <script src="PlatformComputer.js"></script>
+        <script src="PowerUp.js"></script>
+        <script src="JumpPad.js"></script>
+        <script src="Projectile.js"></script>
+        <script src="SharpThing.js"></script>
+        <script src="Audio.js"></script>
+        <script src="Level.js"></script>
+        <script src="ArtWork.js"></script>
+        <script src="Videos.js"></script>
+        <script src="Objs.js"></script>
+        <script src="level1.js"></script>
+        <script src="level2.js"></script>
+        <script src="level3.js"></script>
+        <script src="level4.js"></script>
+        <script src="gameFunctions.js"></script>
+        <script src="Preloader.js"></script>
+        <script src="textures.js"></script>
+
+
+        <script src="lib/js/loaders/OBJLoader.js"></script>
+
+        <video id="sintel"  style="display:none">
+            <source src="Textures/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        </video>
+        <video id="demoreel" style="display:none">
+            <source src="Textures/demoreel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        </video>
+		
+        
+        
+		
+		<script type="text/javascript">
+            
+            
+			var container, stats, loader;
+            
+            //Scene variables
+			var camera, scene, renderer;
+            var targetZ = 5000;
+            var light;
+            
+            //Screen variables
+            var mouseX = 0;
+			var mouseY = 0;
+            var mouseBool = false;
+            var dX = 0;
+            var dY = 0;
+            var targetdX = 0;
+            var targetdY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+            
+            //Intersection variables
+            var projector = new THREE.Projector();;
+            var object = [];
+            GAME.intersectsPlatforms = [];
+            GAME.videos = [];
+
+
+
+            
+            
+            /*var powerUpSFX = new GAME.Audio({ track: 'Audio/powerup.wav'  });
+            var killCompSFX = new GAME.Audio({ track: 'Audio/killcomp.wav'  });
+            var damageSFX = new GAME.Audio({ track: 'Audio/damage.wav' });*/
+            
+            //player variables
+            
+            //level variables
+            //var level1 = new GAME.Level({ init:GAME.level1Init, render:GAME.level1Render});
+            //var level2 = new GAME.Level({ init:GAME.level2Init, render:GAME.level2Render});
+            
+            
+            /*//decorations
+            var decorations = [];
+            var dayTime = true;
+            
+            //computers
+            var killedComputers = [];
+            var computers = [];
+            var nightComputers = [];
+            var originalNumber = 0;
+            
+            //projectiles
+            var projectiles = [];
+            
+            //powerups
+            var powerUps = [];
+            
+            //environment variables
+            var platforms = [];
+            GAME.floor = -1000000;
+            var gravityOff = false;
+            var keyUp = true;*/
+            
+            //audio
+            
+
+            
+            
+            init();
+            animate();
+            
+			function init() {
+                
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+                
+				var info = document.createElement( 'div' );
+                
+				scene = new THREE.Scene();
+                
+                //light = new THREE.SpotLight( 0xFFFFFF, 1, 0,Math.PI/2, 2 );
+                //light = new THREE.DirectionalLight( 0xFFFFFF, 1, 0);
+                camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 10000 );
+                camera.position.z = targetZ;
+                camera.position.y = 0;
+                scene.add( camera );
+                light = new THREE.PointLight( 0xFFFFFF, 1, 0);
+                light.position.z = 2000;
+                scene.add(light);
+                
+                
+				
+                //scene.add(GAME.player.mesh);
+                GAME.currentLevel = GAME.level1;
+                GAME.videos.sintel = document.getElementById( 'sintel' );
+                GAME.videos.reel = document.getElementById( 'demoreel' );
+                GAME.loaded = false;
+                GAME.preloadTextures(
+                                     function(x){console.log(x)},
+                                     function(){GAME.preloadAudio(
+                                                       function(x){console.log(x)},
+                                                       function() {GAME.currentLevel.init(); GAME.loaded = true;
+                                                       }
+                                                                  )}
+                                     );
+                
+                /*player = new GAME.Player({ x:0, y:1000, z:0, health:100, lives:4, width:75, height:75} );
+                object.push(player.mesh);
+                scene.add(player.mesh);
+                //var startPlatform = new GAME.Platform({ x: 0, y:0, z:0, width:300, height:20 });
+                
+                
+                decorations.push( new GAME.Decoration({ x:-2000, y:-5000, z:-2, width:10000, height:10000, color:0x00FFFF }));
+                
+                GAME.dayNightCycle({ background:decorations[0].mesh.material });
+                //decorations[0].mesh.material.color.setRGB(1,1,1);
+                
+                
+                //platforms.push(startPlatform);
+                for (var i = 0; i < 50; i ++) {
+                    var platX = -500 + i*150 + 50*Math.random();
+                    var platY = -200 + i *5 + 20*i*Math.random();
+                    platforms.push(new GAME.Platform({ x:platX, y:platY, z:0, width:100, height:40, color:0x663300 }));
+                    decorations.push( new GAME.Decoration({ x:platX, y:platY+40, z:-1, width:100, height:10, color:0x339900 }));
+                    if (i%4 === 0) {
+                        computers.push(new GAME.PlatformComputer({ platform: platforms[i], x:10, y:0, z:0, velocityX:2 + 2*Math.random(), health:10, width:20, height:20, color:0xFF00FF, ghost:false }));
+                        
+                        originalNumber++;
+                    }
+                    if (i%10 === 0) {
+                        powerUps.push(new GAME.PowerUp({ platform: platforms[i], x:10, y:0, z:0,  width:10, height:10, color:0x00FF00 }));
+                    }
+                }
+                
+                /*var platform1 = new GAME.Platform({ x:-250, y:0, z:0, width:500, height:20 });
+                platforms.push(platform1);*//*
+                
+                for(var i = 0; i < platforms.length; i++) {
+                    scene.add(platforms[i].mesh);
+                }
+                for (var i = 0; i < decorations.length; i++) {
+                    scene.add(decorations[i].mesh);
+                }
+                for (i = 0; i < computers.length; i++) {
+                    scene.add(computers[i].mesh);
+                    
+                }
+                for (i = 0; i < powerUps.length; i++) {
+                    scene.add(powerUps[i].mesh);
+                }*/
+
+                
+
+                /*imageReflection = document.createElement( 'canvas' );
+                imageReflection.width = 480;
+                imageReflection.height = 204;
+
+                imageReflectionContext = imageReflection.getContext( '2d' );
+                imageReflectionContext.fillStyle = '#000000';
+                imageReflectionContext.fillRect( 0, 0, 480, 204 );
+
+                imageReflectionGradient = imageReflectionContext.createLinearGradient( 0, 0, 0, 204 );
+                imageReflectionGradient.addColorStop( 0.2, 'rgba(240, 240, 240, 1)' );
+                imageReflectionGradient.addColorStop( 1, 'rgba(240, 240, 240, 0.8)' );
+
+                textureReflection = new THREE.Texture( imageReflection );
+                textureReflection.minFilter = THREE.LinearFilter;
+                textureReflection.magFilter = THREE.LinearFilter;
+
+                var materialReflection = new THREE.MeshBasicMaterial( { map: textureReflection, side: THREE.BackSide, overdraw: true } );*/
+
+                //
+
+               
+
+                /*mesh = new THREE.Mesh( plane, materialReflection );
+                mesh.position.y = -306;
+                mesh.rotation.x = - Math.PI;
+                mesh.scale.x = mesh.scale.y = mesh.scale.z = 1.5;
+                scene.add( mesh );*/
+
+                //
+
+               /* var separation = 150;
+                var amountx = 10;
+                var amounty = 10;
+
+                var PI2 = Math.PI * 2;
+                var material = new THREE.ParticleCanvasMaterial( {
+
+                    color: 0x0808080,
+                    program: function ( context ) {
+
+                        context.beginPath();
+                        context.arc( 0, 0, 1, 0, PI2, true );
+                        context.closePath();
+                        context.fill();
+
+                    }
+
+                } );*/
+                
+               renderer = new THREE.WebGLRenderer({ antialias: true});
+               //renderer = new THREE.CanvasRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+                
+                
+				container.appendChild( renderer.domElement );
+                
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+                
+                
+                
+                document.addEventListener( 'mousemove', onDocumentMouseMove, true );
+                document.addEventListener( 'mousedown', onDocumentMouseDown, true );
+                document.addEventListener( 'mouseup', onDocumentMouseUp, true );
+                document.addEventListener( 'keydown', onkeydown, true );
+                document.addEventListener( 'keyup', onkeyup, true );
+
+                
+                
+                
+			}
+            
+            function onDocumentMouseMove(event) {
+                tempX = mouseX;
+                tempY = mouseY;
+                mouseX = ( event.clientX - windowHalfX )*2;
+				mouseY = ( windowHalfY - event.clientY )*2;
+                //if (mouseBool) {
+                dX = mouseX - tempX;
+                dY = mouseY - tempY;
+
+                
+                //}
+                if (GAME.intersectsPlatforms.length > 0) {
+                    //GAME.intersectsPlatforms[0].object.setPosition({ x:mouseX , y:mouseY , z:0 });
+                    GAME.intersectsPlatforms[0].movePosition({ x:dX/2 , y:dY/2 , z:0 });
+                    console.log(GAME.player.platformNumber);
+                    //console.log(GAME.intersectsPlatforms[0].object.number);
+                    if(GAME.intersectsPlatforms[0].number == GAME.player.platformNumber) {
+                        //GAME.player.movePosition({x:dX,y:dY,z:0});
+                        //GAME.player.jumpPlayer({jump:2*targetdY});
+                    }
+                }
+                
+            }
+            
+            function onDocumentMouseDown( event ) {
+                event.preventDefault();
+                
+                
+                var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+                projector.unprojectVector( vector, camera );
+                
+                //var ray = new THREE.Raycaster( camera.position, vector.subSelf( camera.position ).normalize() );
+                var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+
+                
+                GAME.intersectsPlatforms = [];
+                for(var i =0; i < GAME.platforms.length; i++){
+                    if(ray.intersectObject( GAME.platforms[i].mesh).length > 0){
+                        console.log(i);
+                        GAME.intersectsPlatforms[0]=(GAME.platforms[i]);
+                    }
+                }
+                
+                if (GAME.intersectsPlatforms.length > 0) {
+                   // console.log("hello");
+                }
+                
+            }
+
+            function onDocumentMouseUp( event ) {
+
+                
+                GAME.intersectsPlatforms = [];
+                
+                
+                for (var i = 0; i < GAME.platforms.length; i++){
+                    var plat = GAME.platforms[i];
+                    //plat.movePosition({ x:plat.velocityX, y:plat.velocityY , z:0 });
+                }
+                
+            }
+            function onkeydown( event ) {
+                
+                event.preventDefault();
+                if (event.keyCode === 39) {
+                    if (!GAME.player.takingDamage){
+                        GAME.player.movePlayerRight({  speed:12});
+                    };
+                    GAME.keyUp = false;
+                }
+                if (event.keyCode === 37) {
+                    if (!GAME.player.takingDamage){
+                        GAME.player.movePlayerLeft({  speed:12});
+                    };
+                    GAME.keyUp = false;
+                }
+                if (event.keyCode === 32) {
+                    if (!GAME.player.takingDamage){
+                        GAME.player.jumpPlayer({  jump:GAME.player.jumpHeight});
+                        //cameraZoom({ zPos:player.jumpHeight, initialZ:camera.position.z, duration:player.jumpHeight*100 });
+                        
+                    };
+                    //GAME.keyUp = false;
+                }
+                if (event.keyCode === 40) {
+                    //player.jumpPlayer({  jump:-3});
+                }
+            }
+            function onkeyup( event ) {
+                event.preventDefault();
+                if (event.keyCode === 39 || event.keyCode === 37) {
+                    //player.stopPlayer({  });
+                    GAME.keyUp = true;
+                }
+            }
+            /*
+            function cameraZoom(params) {
+                var cameraTween2 = new TWEEN.Tween({ zPos : params.zPos*5 + params.initialZ, cam : camera })
+                .to({ zPos: params.initialZ }, params.duration)
+                .onUpdate( function(){
+                          this.cam.position.z =this.zPos;
+                          });
+                var cameraTween1 = new TWEEN.Tween({ zPos : params.initialZ, cam : camera })
+                .to({ zPos: params.zPos*5 + params.initialZ }, params.duration)
+                .onUpdate( function(){
+                          this.cam.position.z =this.zPos;
+                          })
+                .chain( cameraTween2 );
+                
+                cameraTween1.start();
+                
+            };*/
+            
+			
+            
+			function animate() {
+                
+				requestAnimationFrame( animate );
+                
+                render();
+                TWEEN.update();
+				stats.update();
+                
+			}
+            
+			function render() {
+                if(GAME.loaded){
+                    GAME.currentLevel.render();
+                }
+                /*
+                for (i = 0; i < computers.length; i++) {
+                    computers[i].updatePosition();
+                    if (i >= originalNumber){
+                        computers[i].fireAttackUpdate();
+                    }
+                }
+                for (var i = 0; i < projectiles.length; i++) {
+                    projectiles[i].updatePosition();
+                }
+                
+                player.updatePosition({});
+                player.intersected = false;
+                for (var i = 0; i < powerUps.length; i++) {
+                    if(GAME.intersects({ object1:player, object2:powerUps[i], platform:false })){
+                        if(!powerUps[i].used) {
+                            player.jumpHeight *= 1.2;
+                        };
+                        powerUps[i].absorbed();
+                        
+                        
+                    }
+                }
+                if (!player.takingDamage) {
+                    var computersStart = 0;
+                    var computersFinish = originalNumber;
+                    if (!dayTime) {
+                        computersStart = originalNumber;
+                        computersFinish = computers.length;
+                    };
+                    for (var i = computersStart; i < computersFinish; i++) {
+                        if(GAME.intersects({ object1:player, object2:computers[i], platform:true})){
+                            computers[i].killed();
+                            
+                            player.jumpPlayer({ jump:8 });
+                        }else if(GAME.intersects({ object1:player, object2:computers[i], platform:false})){
+                            //computers[i].killed();
+                            
+                            player.movePlayer({  speed:10, bool:computers[i].velocity.x >0 });
+                            player.damage();
+                        }
+                    }
+                    for (var i = 0; i < projectiles.length; i++) {
+                        if(GAME.intersects({ object1:player, object2:projectiles[i], platform:false})&&!dayTime){
+                            player.movePlayer({  speed:10, bool:projectiles[i].velocity.x >0 });
+                            player.damage();
+                        }
+                    };
+                }
+                for (var i = 0; i < platforms.length; i++) {
+                    if(GAME.intersects({ object1:player, object2:platforms[i], platform:true })){
+                        
+                        GAME.floor = platforms[i].bounds.top;
+                        //player.updatePosition({newPosition:new THREE.Vector3(player.position.x, GAME.floor,player.position.z)});
+                        //GAME.bounce({ player:player });
+                        player.intersected = true;
+                        targetZ =1000;
+                       }
+                }*/
+                
+                camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
+                camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
+                //camera.position.z += (targetZ - camera.position.z)*.006;
+                /*if(keyUp) {
+                    player.velocity.x += (0 - player.velocity.x)*.1;
+                };*/
+                
+                
+                light.position.x = camera.position.x;
+                light.position.y = camera.position.y+1000;
+                
+                
+                
+				renderer.render( scene, camera );
+                camera.position.y-=500;
+                
+			}
+            
+            </script>
+        
+	</body>
+</html>

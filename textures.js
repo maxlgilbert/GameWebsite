@@ -10,5 +10,6 @@ GAME.Textures = {
     'ant' : {src:'Textures/ant.png', threeObj:undefined},
     '3dEnv' : {src:'Textures/3dEnv.png', threeObj:undefined},
     'LittleFoot' : {src:'Textures/LittleFoot.png', threeObj:undefined},
-    'fire' : {src:'Textures/smokeparticle.png', threeObj:undefined}
+    'fire' : {src:'Textures/smokeparticle.png', threeObj:undefined},
+    'resume' : {src:'Textures/ResumeForWebsite.png',threeObj:undefined}
 }

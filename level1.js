@@ -107,8 +107,9 @@ console.log("here");
     GAME.platforms.push(new GAME.Button({x:600, y:600, z:10, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:-3, pathLength:200}));         
     GAME.platforms.push(new GAME.Button({x:900, y:800, z:10, width:100, height:32,color:0x00FFFF, velocityX:4, velocityY:0, pathLength:200}));         
     GAME.platforms.push(new GAME.Button({x:900, y:1150, z:10, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:0, pathLength:0})); 
-    GAME.decorations.push( new GAME.Decoration({ x:0, y:+100, z:-10, width:1280, height:1720, color:0x000000, threeD:false }));
-               
+    GAME.decorations.push( new GAME.Decoration({ x:0, y:100, z:-10, width:1280, height:1720, color:0x000000, threeD:false }));
+    GAME.decorations.push( new GAME.Decoration({map:GAME.Textures['resume'].threeObj, x:1400, y:100, z:-10, width:1024, height:1024, color:0xFFFFFF, threeD:false }));
+       
      
 
 

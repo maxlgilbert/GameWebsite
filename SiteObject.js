@@ -61,7 +61,7 @@ GAME.SiteObject.prototype = {
     setBounds : function() {
         this.bounds = ({ left:this.position.x-this.width/2, top:this.position.y-this.height/2+this.height, right:this.position.x-this.width/2+this.width, bottom:this.position.y - this.height/2 +this.height });
     },
-    intersect : function(){
+    intersect : function(params){
         console.log("nothing");
     }
 }

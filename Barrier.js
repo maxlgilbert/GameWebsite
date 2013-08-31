@@ -3,12 +3,12 @@ var GAME = GAME || {};
 
 
 
-/*GAME.Platform = function(geometry, material, x, y, z, width, height, dWidth, dHeight, map, color, velocityX, velocityY, pathLength, front){
+/*GAME.Barrier = function(geometry, material, x, y, z, width, height, dWidth, dHeight, map, color, velocityX, velocityY, pathLength, front){
     this.position = new THREE.Vector3(params.x, params.y, params.z );
 
     this.width = params.width;
     this.height = params.height;
-    this.number = GAME.platforms.length;
+    this.number = GAME.Barriers.length;
     console.log(this.number);
     this.velocity = new THREE.Vector3(params.velocityX||0,params.velocityY|| 0, 0);
     this.geometry = new THREE.PlaneGeometry(params.dWidth,params.dHeight);
@@ -28,11 +28,11 @@ var GAME = GAME || {};
     this.pathLength = params.pathLength
     this.path = ({ left:this.position.x -this.pathLength/2, top:this.position.y + this.height +this.pathLength/2, right:this.position.x + this.width+this.pathLength/2, bottom:this.position.y-this.pathLength/2 });
 };*/
-GAME.Platform = function(params){//(x, y, z, width, height, dWidth, dHeight, map, color, velocityX, velocityY, pathLength, front){
+GAME.Barrier = function(params){//(x, y, z, width, height, dWidth, dHeight, map, color, velocityX, velocityY, pathLength, front){
     GAME.SiteObject.call( this, params );
     /*this.health = params.health;
     this.lives = params.lives;*/
-    this.number = GAME.platforms.length;
+    this.number = GAME.Barriers.length;
     //this.velocityX = params.velocityX;
     //this.velocityY = params.velocityY;
     /*if (params.threeD){
@@ -62,32 +62,51 @@ GAME.Platform = function(params){//(x, y, z, width, height, dWidth, dHeight, map
    // this.bounds = ({ left:this.position.x-this.dWidth/2, top:this.position.y-this.dHeight/2+this.height, right:this.position.x-this.dWidth/2+this.width, bottom:this.position.y - this.dHeight/2 +this.height });
     //console.log(this.bounds.top);
     //this.pathLength = params.pathLength
+    console.log("HELLLOOOO?");
     //this.path = ({ left:this.position.x -this.pathLength/2, top:this.position.y + this.height +this.pathLength/2, right:this.position.x + this.width+this.pathLength/2, bottom:this.position.y-this.pathLength/2 });
 };
 
-GAME.Platform.prototype = GAME.clone(GAME.SiteObject.prototype);
-GAME.Platform.prototype.constructor = GAME.Platform;
-GAME.Platform.prototype.intersect = function() {
-var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[this.number], platform:true});
+GAME.Barrier.prototype = GAME.clone(GAME.SiteObject.prototype);
+GAME.Barrier.prototype.constructor = GAME.Barrier;
+GAME.Barrier.prototype.intersect = function(params) {
 
-    //console.log("HELLLOOOO?Platform");
-    if(interNum===1||interNum===4){
-        GAME.player.intersected = true;
+    console.log("HELLLOOOO?BARRIER");
+var interNum = params.interNum;//GAME.intersects({ object1:GAME.player, object2:GAME.Barriers[this.number], Barrier:true});
+console.log(interNum);
+    if(interNum==0){
+        console.log("right");
+        GAME.player.impededRight = true;
         GAME.player.jumps = 0;
         //targetZ =1000;
-        GAME.player.platformNumber = this.number;
+        //GAME.player.BarrierNumber = this.number;
         var adjust = 0;
-        if (GAME.platforms[this.number].velocity.y>0){
+        /*if (GAME.Barriers[this.number].velocity.y>0){
             GAME.player.velocity.y =0;
-            adjust =GAME.platforms[this.number].velocity.y;
+            adjust =GAME.Barriers[this.number].velocity.y;
         } else {
-            GAME.player.velocity.y = GAME.platforms[this.number].velocity.y;
-        }
-        GAME.player.setPosition({x:GAME.player.position.x, y:GAME.platforms[this.number].bounds.top+adjust, z:GAME.player.position.z})
+            GAME.player.velocity.y = GAME.Barriers[this.number].velocity.y;
+        }*/
+        GAME.player.setPosition({x:this.bounds.left-GAME.player.width/2.0, y:GAME.player.position.y, z:GAME.player.position.z})
+        GAME.player.setBounds();
+    } else if(interNum==2){
+
+        console.log("left");
+        GAME.player.impededLeft = true;
+        GAME.player.jumps = 0;
+        //targetZ =1000;
+        //GAME.player.BarrierNumber = this.number;
+        var adjust = 0;
+        /*if (GAME.Barriers[this.number].velocity.y>0){
+            GAME.player.velocity.y =0;
+            adjust =GAME.Barriers[this.number].velocity.y;
+        } else {
+            GAME.player.velocity.y = GAME.Barriers[this.number].velocity.y;
+        }*/
+        GAME.player.setPosition({x:this.bounds.right+GAME.player.width/2.0, y:GAME.player.position.y, z:GAME.player.position.z})
         GAME.player.setBounds();
     }
 }
-/*GAME.Platform.prototype.updatePosition =  function(params) {
+/*GAME.Barrier.prototype.updatePosition =  function(params) {
     if (this.pathLength!==0){
         if(this.bounds.right > this.path.right) {
             this.velocity.x = -1*Math.abs(this.velocity.x);
@@ -117,7 +136,7 @@ var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[thi
             this.velocity.y*=-1;
         };*/
     //};
-    GAME.Platform.prototype.setPosition = function(params) {
+    GAME.Barrier.prototype.setPosition = function(params) {
         this.bounds.left =params.x;
         this.bounds.right =params.x+this.width;
         this.bounds.top =params.y+this.height;
@@ -126,7 +145,7 @@ var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[thi
         
         //this.setBounds();
     };
-    GAME.Platform.prototype.movePosition = function(params) {
+    GAME.Barrier.prototype.movePosition = function(params) {
         this.dX = params.x;
         this.dY = params.y;
         this.bounds.left +=params.x;

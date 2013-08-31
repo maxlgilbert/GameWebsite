@@ -43,6 +43,7 @@
         <script src="gameFunctions.js"></script>
         <script src="Preloader.js"></script>
         <script src="textures.js"></script>
+        <script src="Barrier.js"></script>
 
 
         <script src="lib/js/loaders/OBJLoader.js"></script>
@@ -152,6 +153,7 @@
                 
 				
                 //scene.add(GAME.player.mesh);
+                GAME.gameplayMode = "platformer";
                 GAME.currentLevel = GAME.level1;
                 GAME.videos.sintel = document.getElementById( 'sintel' );
                 GAME.videos.reel = document.getElementById( 'demoreel' );
@@ -474,22 +476,41 @@
                         targetZ =1000;
                        }
                 }*/
-                
-                camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
-                camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
-                //camera.position.z += (targetZ - camera.position.z)*.006;
-                /*if(keyUp) {
-                    player.velocity.x += (0 - player.velocity.x)*.1;
-                };*/
-                
-                
-                light.position.x = camera.position.x;
-                light.position.y = camera.position.y;//+1000;
-                
-                
-                
-				renderer.render( scene, camera );
-                camera.position.y-=500;
+                if(GAME.gameplayMode == "platformer"){
+                    light.position.z = 2000;
+                    camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
+                    camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
+                    //camera.position.z += (targetZ - camera.position.z)*.006;
+                    /*if(keyUp) {
+                        player.velocity.x += (0 - player.velocity.x)*.1;
+                    };*/
+                    
+                    
+                    light.position.x = camera.position.x;
+                    light.position.y = camera.position.y;//+1000;
+                    
+                    
+                    
+    				renderer.render( scene, camera );
+                    camera.position.y-=500;
+                } else if (GAME.gameplayMode == "flashlight"){
+                    light.position.z = 10;
+                    camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
+                    camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
+                    //camera.position.z += (targetZ - camera.position.z)*.006;
+                    /*if(keyUp) {
+                        player.velocity.x += (0 - player.velocity.x)*.1;
+                    };*/
+                    
+                    
+                    light.position.x = camera.position.x;
+                    light.position.y = camera.position.y;//+1000;
+                    
+                    
+                    
+                    renderer.render( scene, camera );
+                    camera.position.y-=500;
+                } 
                 
 			}
             

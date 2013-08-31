@@ -31,6 +31,7 @@ init:function() {
     //environment variables
     GAME.buttons = [];
     GAME.platforms = [];
+    GAME.Barriers = [];
     GAME.platformMeshes = [];
     GAME.floor = -1000000;
     GAME.gravityOff = false;
@@ -110,10 +111,17 @@ console.log("here");
     GAME.decorations.push( new GAME.Decoration({ x:0, y:100, z:-10, width:1280, height:1720, color:0x000000, threeD:false }));
     GAME.decorations.push( new GAME.Decoration({map:GAME.Textures['resume'].threeObj, x:1400, y:100, z:-10, width:1024, height:1024, color:0xFFFFFF, threeD:false }));
        GAME.decorations.push( new GAME.Decoration({ x:1400, y:100, z:-15, width:1024, height:1024, color:0xFFFFFF, threeD:false }));
-    GAME.flashlight = function(){
-        light.position.z = 30;
+    GAME.flashlightOn = function(){
+        //light.position.z = 30;
+        //GAME.gameplayMode = "flashlight";
     }
-    GAME.platforms.push(new GAME.Button({trigger: GAME.flashlight, x:1280, y:100, z:10, width:1280, height:32,color:0x00FF00, velocityX:0, velocityY:0, pathLength:0}));
+    GAME.flashlightOff = function(){
+        //light.position.z = 2000;
+        GAME.gameplayMode = "platformer";
+    }
+    GAME.platforms.push(new GAME.Button({trigger: GAME.flashlightOn, x:1280, y:100, z:10, width:1280, height:32,color:0x00FF00, velocityX:0, velocityY:0, pathLength:0}));
+    GAME.platforms.push(new GAME.Button({trigger: GAME.flashlightOff, x:2560, y:100, z:10, width:1280, height:32,color:0xFF0000, velocityX:0, velocityY:0, pathLength:0}));
+    GAME.Barriers.push(new GAME.Barrier({x:2560, y:100, z:0, width:100, height:300,color:0xFF0000, velocityX:0, velocityY:0, pathLength:0}));
     
      
 
@@ -173,8 +181,19 @@ console.log("here");
         GAME.siteObjects.push(GAME.platforms[i]);
         //GAME.platformMeshes.push(GAME.platforms[i].mesh);
     }
+    /*for(var i = 0; i < GAME.Barriers.length; i++) {
+        GAME.siteObjects.push(GAME.Barriers[i]);
+
+    console.log("HELLLOOOO?eroh23");
+        //GAME.platformMeshes.push(GAME.platforms[i].mesh);
+    }*/
      for(var i = 0; i < GAME.siteObjects.length; i++) {
         scene.add(GAME.siteObjects[i].mesh);
+        //GAME.platformMeshes.push(GAME.platforms[i].mesh);
+    }
+
+    for(var i = 0; i < GAME.Barriers.length; i++) {
+        scene.add(GAME.Barriers[i].mesh);
         //GAME.platformMeshes.push(GAME.platforms[i].mesh);
     }
     
@@ -268,6 +287,14 @@ console.log("here");
                             }
                             }
 
+                             for (var i = 0; i < GAME.Barriers.length; i++) {
+                            var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.Barriers[i], platform:false });
+                                //console.log(interNum);
+                            if ( interNum === 0||interNum ===1||interNum ===2||interNum ===4){
+                            GAME.Barriers[i].intersect({interNum:interNum});
+                            }
+                            }
+
                             
                           
     if (!GAME.player.takingDamage) {
@@ -327,6 +354,7 @@ console.log("here");
                             }
                             GAME.previousPlatformNumber = GAME.player.platformNumber;
                             
+                            camera.position.z += (targetZ - camera.position.z)*.03;
                             if(GAME.keyUp) {
                             var targetVelocityX = 0;
                             if(GAME.player.platformNumber !== -1&&!GAME.player.takingDamage) {
@@ -340,7 +368,6 @@ console.log("here");
 
                             /*camera.position.x += (GAME.player.position.x - camera.position.x)*.03;
                             camera.position.y += (GAME.player.position.y - camera.position.y)*.006;*/
-                            camera.position.z += (targetZ - camera.position.z)*.03;
                             //camera.position.z = 3000;
                             
 }

@@ -12,6 +12,7 @@ init:function() {
     GAME.siteObjects = [];
     //decorations
     GAME.decorations = [];
+    GAME.collectibles = [];
     GAME.dayTime = true;
     
     //computers
@@ -54,7 +55,16 @@ init:function() {
     
     
     //var startPlatform = new GAME.Platform({ x: 0, y:0, z:0, width:300, height:20 });
-    GAME.siteObjects.push(new GAME.ParticleEmitter({ x:550, y:0, z:-200, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:4000, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:5000, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:5600, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6500, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6600, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:1, x:4000, y:700, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:1, x:5300, y:500, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6700, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6800, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6900, y:-100, z:10, width:0, height:0, color:0xFF0000}));
     //GAME.siteObjects.push(new GAME.ParticleEmitter({ x:600, y:600, z:-100, width:0, height:0, color:0xFF0000}));
     //console.log(test.width);
     
@@ -89,13 +99,12 @@ init:function() {
 
     GAME.play = function(){
 GAME.videos.reel.play();
-targetZ = 2000;
-
+GAME.gameplayMode = 3;
     }
 
     GAME.stop = function(){
 GAME.videos.reel.pause();
-targetZ = 5000;
+GAME.gameplayMode = 0;
 
     }
     GAME.platforms.push(new GAME.Button({trigger: GAME.play, x:0, y:1700, z:10, width:640, height:32,color:0x00FF00, velocityX:0, velocityY:0, pathLength:0}));
@@ -109,25 +118,27 @@ targetZ = 5000;
     GAME.platforms.push(new GAME.Button({x:900, y:1150, z:10, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:0, pathLength:0})); 
     GAME.decorations.push( new GAME.Decoration({ x:0, y:0, z:-10, width:1280, height:1720, color:0x080000, threeD:false }));
     GAME.decorations.push( new GAME.Decoration({map:GAME.Textures['resume'].threeObj, x:3000, y:0, z:-10, width:1024, height:1024, color:0xFFFFFF, threeD:false }));
+    GAME.collectibles.push( new GAME.Collectible({map:GAME.Textures['LittleFoot'].threeObj, x:800, y:1400, z:-8, width:100, height:66, color:0xFFFFFF, threeD:false }));
+    GAME.collectibles.push( new GAME.Collectible({map:GAME.Textures['3dEnv'].threeObj, x:1000, y:600, z:-6, width:75, height:88, color:0xFFFFFF, threeD:false }));
        //GAME.decorations.push( new GAME.Decoration({ x:1400, y:0, z:-15, width:1024, height:1024, color:0xFFFFFF, threeD:false }));
     GAME.flashlightOn = function(){
         //light.position.z = 30;
-        GAME.gameplayMode = 1;
+        //GAME.gameplayMode = 1;
     }
     GAME.flashlightOff = function(){
         //light.position.z = 2000;
-        GAME.gameplayMode = 0;
+        //GAME.gameplayMode = 0;
     }
 
     GAME.growDarker = function(){
         //light.position.z = 2000;
-        GAME.gameplayMode = 2;
+        //GAME.gameplayMode = 2;
     }
 
     GAME.platforms.push(new GAME.Button({trigger: GAME.growDarker, x:1330, y:0, z:10, width:1670, height:32,color:0xFFFFFF, velocityX:0, velocityY:0, pathLength:0}));
     
     GAME.platforms.push(new GAME.Button({trigger: GAME.flashlightOn, x:3000, y:0, z:10, width:1000, height:32,color:0x00FF00, velocityX:0, velocityY:0, pathLength:0}));
-    GAME.platforms.push(new GAME.Button({trigger: GAME.flashlightOff, x:4000, y:0, z:10, width:1000, height:32,color:0xFF0000, velocityX:0, velocityY:0, pathLength:0}));
+    GAME.platforms.push(new GAME.Button({trigger: GAME.flashlightOff, x:4000, y:0, z:10, width:5000, height:32,color:0xFF0000, velocityX:0, velocityY:0, pathLength:0}));
     GAME.Barriers.push(new GAME.Barrier({x:-50, y:0, z:-10, width:50, height:2720,color:0x100000, velocityX:0, velocityY:0, pathLength:0}));
     GAME.Barriers.push(new GAME.Barrier({x:1280, y:0, z:-10, width:50, height:2000,color:0x100000, velocityX:0, velocityY:0, pathLength:0}));
     
@@ -198,6 +209,10 @@ targetZ = 5000;
     }*/
      for(var i = 0; i < GAME.siteObjects.length; i++) {
         scene.add(GAME.siteObjects[i].mesh);
+        //GAME.platformMeshes.push(GAME.platforms[i].mesh);
+    }
+    for(var i = 0; i < GAME.collectibles.length; i++) {
+        scene.add(GAME.collectibles[i].mesh);
         //GAME.platformMeshes.push(GAME.platforms[i].mesh);
     }
 
@@ -293,6 +308,12 @@ targetZ = 5000;
                             var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.siteObjects[i], platform:true });
                             if ( interNum === 0||interNum ===1||interNum ===2||interNum ===4){
                             GAME.siteObjects[i].intersect();
+                            }
+                            }
+                            for (var i = 0; i < GAME.collectibles.length; i++) {
+                            var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.collectibles[i], platform:false });
+                            if ( interNum === 0||interNum ===1||interNum ===2||interNum ===4){
+                            GAME.collectibles[i].intersect();
                             }
                             }
 

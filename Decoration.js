@@ -37,6 +37,9 @@ GAME.Decoration = function(params){
     if(!params.threeD){
         //this.mesh.rotation.x = Math.PI/2;
     }
+    if(params.scaleX){
+        this.mesh.scale.set(params.scaleX,params.scaleY,1);
+    }
         
     //this.bounds = ({ left:this.position.x, top:this.position.y+this.height, right:this.position.x+this.width, bottom:this.position.y });
 };

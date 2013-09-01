@@ -34,6 +34,9 @@ GAME.SiteObject = function( params ) {
     	this.mesh.position.x = this.position.x + this.width/2;//(this.position);
         this.mesh.position.y = this.position.y + this.height/2;//(this.position);
         this.mesh.position.z = this.position.z;
+        if(params.scaleX){
+            this.mesh.scale.set(params.scaleX,params.scaleY,1);
+        }
 	}
 }
 

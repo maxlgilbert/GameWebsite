@@ -44,6 +44,7 @@
         <script src="Preloader.js"></script>
         <script src="textures.js"></script>
         <script src="Barrier.js"></script>
+        <script src="Collectible.js"></script>
 
 
         <script src="lib/js/loaders/OBJLoader.js"></script>
@@ -477,7 +478,8 @@
                        }
                 }*/
                 if(GAME.gameplayMode == 0){
-                    console.log("platformer");
+                    //console.log("platformer");
+                    targetZ = 5000;
                     light.position.z = 2000;
                     camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
                     camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
@@ -495,7 +497,7 @@
     				renderer.render( scene, camera );
                     camera.position.y-=500;
                 } else if (GAME.gameplayMode == 1){
-                    console.log("flashlight");
+                    //console.log("flashlight");
                     light.position.z = 10;
                     camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
                     camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
@@ -513,7 +515,7 @@
                     renderer.render( scene, camera );
                     camera.position.y-=500;
                 } else if (GAME.gameplayMode == 2){
-                    console.log("approaching");
+                    //console.log("approaching");
                     light.position.z = 2000 - GAME.player.position.x;
                     camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
                     camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
@@ -530,7 +532,26 @@
                     
                     renderer.render( scene, camera );
                     camera.position.y-=500;
-                } 
+                } else if(GAME.gameplayMode == 3){
+                    //console.log("platformer");
+                    targetZ = 2000;
+                    light.position.z = 2000;
+                     camera.position.x += (640- camera.position.x)*.1;
+                    camera.position.y += (1860 - camera.position.y)*.1 + 500;
+                    //camera.position.z += (targetZ - camera.position.z)*.006;
+                    /*if(keyUp) {
+                        player.velocity.x += (0 - player.velocity.x)*.1;
+                    };*/
+                    
+                    
+                    light.position.x = camera.position.x;
+                    light.position.y = camera.position.y;//+1000;
+                    
+                    
+                    
+                    renderer.render( scene, camera );
+                    camera.position.y-=500;
+                }
                 
 			}
             

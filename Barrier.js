@@ -70,10 +70,10 @@ GAME.Barrier.prototype = GAME.clone(GAME.SiteObject.prototype);
 GAME.Barrier.prototype.constructor = GAME.Barrier;
 GAME.Barrier.prototype.intersect = function(params) {
 var interNum = params.interNum;//GAME.intersects({ object1:GAME.player, object2:GAME.Barriers[this.number], Barrier:true});
-console.log(interNum);
+//console.log(interNum);
     if(interNum==0){
         //GAME.player.impededRight = true;
-        GAME.player.jumps = 0;
+        //GAME.player.jumps = 0;
         //targetZ =1000;
         //GAME.player.BarrierNumber = this.number;
         var adjust = 0;
@@ -88,7 +88,7 @@ console.log(interNum);
         GAME.player.velocity.x = 0;
     } else if(interNum==2){
         //GAME.player.impededLeft = true;
-        GAME.player.jumps = 0;
+        //GAME.player.jumps = 0;
         //targetZ =1000;
         //GAME.player.BarrierNumber = this.number;
         var adjust = 0;

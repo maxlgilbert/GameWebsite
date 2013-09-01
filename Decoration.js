@@ -33,7 +33,7 @@ GAME.Decoration = function(params){
     }
     this.threeD = params.threeD;
     this.mesh = new THREE.Mesh(this.geom, material);
-    this.mesh.position.set(this.position.x+this.width/2, this.position.y+this.height/2, this.position.z);
+    this.mesh.position.set(this.position.x+this.width/2.0, this.position.y+this.height/2.0, this.position.z);
     if(!params.threeD){
         //this.mesh.rotation.x = Math.PI/2;
     }

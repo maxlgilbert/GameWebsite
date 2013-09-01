@@ -11,11 +11,12 @@ GAME.SiteObject = function( params ) {
 	this.position = new THREE.Vector3 ( params.x, params.y, params.z );
     this.width = params.width;
     this.height = params.height;
-    this.position.set(this.position.x+params.width/2, this.position.y+params.height/2, this.position.z);
+    this.position.set(this.position.x, this.position.y, this.position.z);
     this.velocityX = params.velocityX;
     this.velocityY = params.velocityY;
     this.velocity = new THREE.Vector3(this.velocityX||0,this.velocityY|| 0, 0);
-    this.bounds = ({ left:this.position.x-this.width/2, top:this.position.y-this.height/2+this.height, right:this.position.x-this.width/2+this.width, bottom:this.position.y - this.height/2 +this.height });
+    this.bounds = ({ left:this.position.x, top:this.position.y+this.height, right:this.position.x+this.width, bottom:this.position.y});
+    
     this.pathLength = params.pathLength||0;
     this.path = ({ left:this.position.x -this.pathLength/2, top:this.position.y + this.height +this.pathLength/2, right:this.position.x + this.width+this.pathLength/2, bottom:this.position.y-this.pathLength/2 });
     this.siteObject = params.siteObject;
@@ -30,7 +31,9 @@ GAME.SiteObject = function( params ) {
         	material.map=params.map;
     	}
     	this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(this.width, this.height),material);
-    	this.mesh.position = (this.position);
+    	this.mesh.position.x = this.position.x + this.width/2;//(this.position);
+        this.mesh.position.y = this.position.y + this.height/2;//(this.position);
+        this.mesh.position.z = this.position.z;
 	}
 }
 
@@ -57,9 +60,13 @@ GAME.SiteObject.prototype = {
         this.bounds.right+= this.velocity.x;
         this.bounds.top+= this.velocity.y;
         this.bounds.bottom+= this.velocity.y;
+        
+        this.mesh.position.x = this.position.x + this.width/2;//(this.position);
+        this.mesh.position.y = this.position.y + this.height/2;//(this.position);
+        this.mesh.position.z = this.position.z;
 	},
     setBounds : function() {
-        this.bounds = ({ left:this.position.x-this.width/2, top:this.position.y-this.height/2+this.height, right:this.position.x-this.width/2+this.width, bottom:this.position.y - this.height/2 +this.height });
+        this.bounds = ({ left:this.position.x, top:this.position.y+this.height, right:this.position.x+this.width, bottom:this.position.y+this.height });
     },
     intersect : function(params){
         console.log("nothing");

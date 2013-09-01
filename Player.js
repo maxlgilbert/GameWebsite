@@ -17,7 +17,7 @@ GAME.Player = function(params){
     //this.material = new THREE.MeshPhongMaterial({color: 0xFFFFFF, map: GAME.Textures['player'].threeObj, emissive:0x080808, transparent:true, side:THREE.DoubleSide});
     this.material = new THREE.MeshPhongMaterial({color: 0xAA00FF, emissive:0x080808, transparent:true, side:THREE.DoubleSide});
     this.mesh = new THREE.Mesh(plane, this.material);
-    this.mesh.position.set(this.position.x + this.width/2, this.position.y + this.height/2, this.position.z);
+    this.mesh.position.set(this.position.x + this.width/2.0, this.position.y + this.height/2.0, this.position.z);
     //this.mesh.rotation.x = Math.PI/2;
     this.mesh.doubleSided = true;
     this.setBounds();
@@ -141,7 +141,7 @@ GAME.Player.prototype = {
     
     setPosition : function(params) {
         this.position = new THREE.Vector3(params.x, params.y, params.z );
-        this.mesh.position.set(this.position.x + this.width/2, this.position.y + this.height/2, this.position.z);
+        this.mesh.position.set(this.position.x+this.width/2.0, this.position.y+this.height/2.0, this.position.z);
         this.setBounds();
     },
 

@@ -7,7 +7,7 @@
                 <style>
                     body {
                         font-family: Monospace;
-                        background-color: #FFFFFF;
+                        background-color: #000000;
                         margin: 0px;
                         overflow: hidden;
                     }
@@ -153,7 +153,7 @@
                 
 				
                 //scene.add(GAME.player.mesh);
-                GAME.gameplayMode = "platformer";
+                GAME.gameplayMode = 0;
                 GAME.currentLevel = GAME.level1;
                 GAME.videos.sintel = document.getElementById( 'sintel' );
                 GAME.videos.reel = document.getElementById( 'demoreel' );
@@ -302,7 +302,7 @@
                 if (GAME.intersectsPlatforms.length > 0) {
                     //GAME.intersectsPlatforms[0].object.setPosition({ x:mouseX , y:mouseY , z:0 });
                     GAME.intersectsPlatforms[0].movePosition({ x:dX/2 , y:dY/2 , z:0 });
-                    console.log(GAME.player.platformNumber);
+                    //console.log(GAME.player.platformNumber);
                     //console.log(GAME.intersectsPlatforms[0].object.number);
                     if(GAME.intersectsPlatforms[0].number == GAME.player.platformNumber) {
                         //GAME.player.movePosition({x:dX,y:dY,z:0});
@@ -326,7 +326,7 @@
                 GAME.intersectsPlatforms = [];
                 for(var i =0; i < GAME.platforms.length; i++){
                     if(ray.intersectObject( GAME.platforms[i].mesh).length > 0){
-                        console.log(i);
+                        //console.log(i);
                         GAME.intersectsPlatforms[0]=(GAME.platforms[i]);
                     }
                 }
@@ -476,7 +476,8 @@
                         targetZ =1000;
                        }
                 }*/
-                if(GAME.gameplayMode == "platformer"){
+                if(GAME.gameplayMode == 0){
+                    console.log("platformer");
                     light.position.z = 2000;
                     camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
                     camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
@@ -493,8 +494,27 @@
                     
     				renderer.render( scene, camera );
                     camera.position.y-=500;
-                } else if (GAME.gameplayMode == "flashlight"){
+                } else if (GAME.gameplayMode == 1){
+                    console.log("flashlight");
                     light.position.z = 10;
+                    camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
+                    camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
+                    //camera.position.z += (targetZ - camera.position.z)*.006;
+                    /*if(keyUp) {
+                        player.velocity.x += (0 - player.velocity.x)*.1;
+                    };*/
+                    
+                    
+                    light.position.x = camera.position.x;
+                    light.position.y = camera.position.y;//+1000;
+                    
+                    
+                    
+                    renderer.render( scene, camera );
+                    camera.position.y-=500;
+                } else if (GAME.gameplayMode == 2){
+                    console.log("approaching");
+                    light.position.z = 2000 - GAME.player.position.x;
                     camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
                     camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
                     //camera.position.z += (targetZ - camera.position.z)*.006;

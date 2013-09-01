@@ -122,7 +122,7 @@ var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[thi
         this.bounds.right =params.x+this.width;
         this.bounds.top =params.y+this.height;
         this.bounds.bottom =params.y;
-        this.position = new THREE.Vector3(params.x+this.dWidth/2, params.y+this.dHeight/2, params.z );
+        this.position = new THREE.Vector3(params.x, params.y, params.z );
         
         //this.setBounds();
     };
@@ -137,7 +137,7 @@ var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[thi
         this.position.y+=params.y;
         this.position.z+=params.z;
         this.path = ({ left:this.position.x -this.pathLength/2, top:this.position.y + this.height +this.pathLength/2, right:this.position.x + this.width+this.pathLength/2, bottom:this.position.y-this.pathLength/2 });
-        
+        //this.mesh.setPosition(this.position
         /*this.velocity.x = params.x;
         this.velocity.y = params.y;*/
         

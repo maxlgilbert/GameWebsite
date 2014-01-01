@@ -48,14 +48,14 @@ init:function() {
                             targetZ = 5000;
                             camera.position.y = 0;
                             //scene.add( camera );*/
-                            GAME.player = new GAME.Player({ x:0, y:1000, z:0, health:100, lives:4, width:100, height:150} );
+                            GAME.player = new GAME.Player({ x:0, y:1000, z:0, health:100, lives:4, width:100, height:150,color:0x000000, velocityX:0, velocityY:0, pathLength:0,mass:20} );
                             GAME.player.reset({level:1});
-                            
+                            //GAME.siteObjects.push(GAME.player);
                             //GAME.Tracks['maintheme'].threeObj.play();
     
     
     //var startPlatform = new GAME.Platform({ x: 0, y:0, z:0, width:300, height:20 });
-    GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:4000, y:-100, z:10, width:0, height:0, color:0xFF0000}));
+   /* GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:4000, y:-100, z:10, width:0, height:0, color:0xFF0000}));
     GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:5000, y:-100, z:10, width:0, height:0, color:0xFF0000}));
     GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:5600, y:-100, z:10, width:0, height:0, color:0xFF0000}));
     GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6500, y:-100, z:10, width:0, height:0, color:0xFF0000}));
@@ -65,7 +65,7 @@ init:function() {
     GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6700, y:-100, z:10, width:0, height:0, color:0xFF0000}));
     GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6800, y:-100, z:10, width:0, height:0, color:0xFF0000}));
     GAME.siteObjects.push(new GAME.ParticleEmitter({ direction:0, x:6900, y:-100, z:10, width:0, height:0, color:0xFF0000}));
-    //GAME.siteObjects.push(new GAME.ParticleEmitter({ x:600, y:600, z:-100, width:0, height:0, color:0xFF0000}));
+   */ //GAME.siteObjects.push(new GAME.ParticleEmitter({ x:600, y:600, z:-100, width:0, height:0, color:0xFF0000}));
     //console.log(test.width);
     
                             //GAME.decorations.push( new GAME.Decoration({ x:-2000, y:-5000, z:-100, width:10000, height:10000, color:0x00FFFF, threeD:false }));
@@ -76,12 +76,81 @@ init:function() {
 
     //GAME.platforms.push(new GAME.Button({x:500, y:-200, z:0, width:100, height:40, dWidth:100, dHeight:512, map:GAME.Textures['background'].threeObj, color:0xFFFFFF, velocityX:0, velocityY:0, pathLength:0, front:true  }));
                                                                         //GAME.Platform = function(geometry, material, x, y, z, width, height, dWidth, dHeight, map, color, velocityX, velocityY, pathLength, front)
-    GAME.platforms.push(new GAME.Platform({x:0, y:0, z:10, width:1280, height:32,color:0x00FFFF, velocityX:0, velocityY:0, pathLength:0}));
+    GAME.platforms.push(new GAME.Platform({x:0, y:950, z:10, width:2000, height:691,map:GAME.Textures['logo'].threeObj, color:0xFFFFFF, velocityX:0, velocityY:0,mass:10}));
+    GAME.platforms.push(new GAME.Platform({x:0, y:150, z:10, width:2512, height:150,map:GAME.Textures['info'].threeObj, color:0xFFFFFF, velocityX:0, velocityY:0,mass:10}));
+    
+    /*GAME.platforms.push(new GAME.Platform({x:0, y:-400, z:10, width:800, height:200,color:0x00FFFF, velocityX:0, velocityY:0, mass:1000000000000}));
+    GAME.platforms.push(new GAME.Platform({x:-500, y:100, z:10, width:200, height:1200,color:0x00FFFF, velocityX:0, velocityY:0, mass:1000000000000}));
+    GAME.platforms.push(new GAME.Platform({x:500, y:100, z:10, width:200, height:1200,color:0x00FFFF, velocityX:0, velocityY:0, mass:1000000000000}));
+    GAME.platforms.push(new GAME.Platform({x:0, y:600, z:10, width:800, height:200,color:0x00FFFF, velocityX:0, velocityY:0, mass:1000000000000}));
+    *///GAME.platforms.push(new GAME.Platform({x:0, y:-900, z:10, width:6000, height:800,color:0x0000FF, velocityX:0, velocityY:0, pathLength:0,mass:1000000000}));
+    
+GAME.goToForm = function(){
+    console.log("Tiggered");
+    window.open("https://docs.google.com/spreadsheet/viewform?fromEmail=true&formkey=dFZ2cTlpakhrLXlyc3lidkRTZGZLREE6MA", '_blank');
+    }
+    GAME.platforms.push(new GAME.Platform({x:0, y:450, z:0, width:5000, height:200,color:0x000000, velocityX:0, velocityY:0,mass:1}));
+    
+    GAME.platforms.push(new GAME.Button({siteObject:GAME.platforms[GAME.platforms.length-1],trigger: GAME.goToForm, x:0, y:0, z:10, width:768, height:168,map:GAME.Textures['signup'].threeObj,color:0xFFFFFF, velocityX:0, velocityY:0,mass:1}));
+    
+   
+    var currPlat = GAME.platforms.length;
+    GAME.showTab1 = function(){
+        GAME.platforms[currPlat].material.opacity = 1.0;
+        GAME.platforms[currPlat+1].material.opacity = .1;
+        GAME.platforms[currPlat+2].material.opacity = .1;
+        GAME.platforms[currPlat+3].material.color = new THREE.Color(0x0033FF);
+        GAME.platforms[currPlat+4].material.color = new THREE.Color(0x000000);
+        GAME.platforms[currPlat+5].material.color = new THREE.Color(0x000000);
+    }
+
+    GAME.showTab2 = function(){
+        GAME.platforms[currPlat].material.opacity = .1;
+        GAME.platforms[currPlat+1].material.opacity = 1.0;
+        GAME.platforms[currPlat+2].material.opacity = .1;
+        GAME.platforms[currPlat+3].material.color = new THREE.Color(0x000000);
+        GAME.platforms[currPlat+4].material.color = new THREE.Color(0x0033FF);
+        GAME.platforms[currPlat+5].material.color = new THREE.Color(0x000000);
+    }
+
+
+    GAME.showTab3 = function(){
+        GAME.platforms[currPlat].material.opacity = .1;
+        GAME.platforms[currPlat+1].material.opacity = .1;
+        GAME.platforms[currPlat+2].material.opacity = 1.0;
+        GAME.platforms[currPlat+3].material.color = new THREE.Color(0x000000);
+        GAME.platforms[currPlat+4].material.color = new THREE.Color(0x000000);
+        GAME.platforms[currPlat+5].material.color = new THREE.Color(0x0033FF);
+    }
+
+    GAME.platforms.push(new GAME.Platform({x:-1575, y:-900, z:10, width:800, height:800,map:GAME.Textures['abouttext'].threeObj, color:0x000000, velocityX:0, velocityY:0,mass:10}));
+    GAME.platforms.push(new GAME.Platform({x:0, y:-1124, z:10, width:1024, height:1024,map:GAME.Textures['announcementstext'].threeObj, color:0x000000, velocityX:0, velocityY:0,mass:10}));
+    GAME.platforms.push(new GAME.Platform({x:1575, y:-1124, z:10, width:1024, height:1024,map:GAME.Textures['contacttext'].threeObj, color:0x000000, velocityX:0, velocityY:0,mass:10}));
+    
+       
+
+    GAME.platforms.push(new GAME.Button({x:-1575, y:-400, z:0, width:1500, height:100,color:0x000000, velocityX:0, velocityY:0,mass:1}));
+    GAME.platforms.push(new GAME.Button({x:0, y:-400, z:0, width:1500, height:100,color:0x000000, velocityX:0, velocityY:0,mass:1}));
+    GAME.platforms.push(new GAME.Button({x:1575, y:-400, z:0, width:1500, height:100,color:0x000000, velocityX:0, velocityY:0,mass:1}));
+    
+    
+      
+        GAME.platforms[currPlat].material.opacity = .1;
+        GAME.platforms[currPlat+1].material.opacity = 1.0;
+        GAME.platforms[currPlat+2].material.opacity = .1;
+        GAME.platforms[currPlat+3].material.color = new THREE.Color(0x000000);
+        GAME.platforms[currPlat+4].material.color = new THREE.Color(0x0033FF);
+        GAME.platforms[currPlat+5].material.color = new THREE.Color(0x000000);
+    GAME.platforms.push(new GAME.Button({siteObject:GAME.platforms[GAME.platforms.length-3],trigger: GAME.showTab1, map:GAME.Textures['about'].threeObj, x:0, y:0, z:10, width:1500, height:100,color:0xFFFFFF, velocityX:0, velocityY:0,mass:1}));
+    GAME.platforms.push(new GAME.Button({siteObject:GAME.platforms[GAME.platforms.length-3],trigger: GAME.showTab2, map:GAME.Textures['announcements'].threeObj, x:0, y:0, z:10, width:1500, height:100,color:0xFFFFFF, velocityX:0, velocityY:0,mass:1}));
+    GAME.platforms.push(new GAME.Button({siteObject:GAME.platforms[GAME.platforms.length-3],trigger: GAME.showTab3, map:GAME.Textures['contact'].threeObj, x:0, y:0, z:10, width:1500, height:100,color:0xFFFFFF, velocityX:0, velocityY:0,mass:1}));
+    
+
     //GAME.platforms.push(new GAME.Button({destination: GAME.artWork, x:-600, y:150, z:0, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:2, pathLength:100}));
     //GAME.platforms.push(new GAME.Button({trigger:null, x:-600, y:150, z:10, width:100, height:32,color:0x00FFFF, velocityX:0, velocityY:2, pathLength:100}));
    
     
-    imageD = document.createElement( 'canvas' );
+    /*imageD = document.createElement( 'canvas' );
     imageD.width = 1280;
     imageD.height = 720;
 
@@ -142,7 +211,7 @@ GAME.gameplayMode = 0;
     GAME.Barriers.push(new GAME.Barrier({x:-50, y:0, z:-10, width:50, height:2720,color:0x100000, velocityX:0, velocityY:0, pathLength:0}));
     GAME.Barriers.push(new GAME.Barrier({x:1280, y:0, z:-10, width:50, height:2000,color:0x100000, velocityX:0, velocityY:0, pathLength:0}));
     
-     
+     */
      
 
 
@@ -160,7 +229,7 @@ GAME.gameplayMode = 0;
                             //GAME.platforms.push(new GAME.Platform({ x:-650, y:200, z:0, width:200, height:20, dWidth:200, dHeight:400, color:0xFFFFFF, pathLength:0, velocityx:0, velocityY:0,map:GAME.Textures['background'].threeObj, front:true }));
                             //GAME.platforms.push(new GAME.Platform({ x:550, y:200, z:0, width:100, height:10, dWidth:100, dHeight:200, color:0xFFFFFF, pathLength:0, velocityX:0,map:GAME.Textures['background'].threeObj, front:true  }));
      //GAME.siteObjects.push(new GAME.JumpPad({ siteObject: GAME.platforms[0], x:0, y:0, z:0,  width:40, height:10, color:0xFF00FF, temporary:true}));
-     GAME.siteObjects.push(new GAME.JumpPad({ siteObject: GAME.platforms[6], x:0, y:0, z:0,  width:40, height:10, color:0xFF00FF, temporary:true}));
+     //GAME.siteObjects.push(new GAME.JumpPad({ siteObject: GAME.platforms[6], x:0, y:0, z:0,  width:40, height:10, color:0xFF00FF, temporary:true}));
                     //GAME.jumpPads.push(new GAME.JumpPad({ siteObject: GAME.platforms[2], x:0, y:0, z:0,  width:60, height:10, dWidth:60, dHeight:10,color:0xFF00FF, temporary:true, map:GAME.Textures['fire'].threeObj }));
     //GAME.powerUps.push(new GAME.PowerUp({ platform: GAME.platforms[3], x:10, y:0, z:0,  width:10, height:15, color:0x00FF00, temporary:true }));
                             //GAME.sharpThings.push(new GAME.SharpThing({ platform: GAME.platforms[1], x:150, y:0, z:0,  width:20, height:30, dWidth:20, dHeight:30,color:0xFF00FF, temporary:true, map:GAME.Textures['ant'].threeObj }));
@@ -168,8 +237,7 @@ GAME.gameplayMode = 0;
                            
             //GAME.computers.push(new GAME.PlatformComputer({ platform: GAME.platforms[1], x:-400, y:0, z:0, velocityX: 3, health:10, width:472, height:326, color:0xFF00FF, ghost:false, map:GAME.Textures['ant'].threeObj, boundLevel:15 }));
                             //GAME.computers.push(new GAME.PlatformComputer({ platform: GAME.platforms[1], x:10, y:0, z:0, velocityX: 3, health:10, width:20, height:20, color:0xFF00FF, ghost:false, boundLevel:0 }));
-                            var s = GAME.Textures['ant'].threeObj;
-                            s = s;
+                           
                             
                             
                             //GAME.platforms[0].addRestingObject({restingObject:GAME.computers[0]});
@@ -208,10 +276,12 @@ GAME.gameplayMode = 0;
         //GAME.platformMeshes.push(GAME.platforms[i].mesh);
     }*/
      for(var i = 0; i < GAME.siteObjects.length; i++) {
-        scene.add(GAME.siteObjects[i].mesh);
+        scene.add(GAME.siteObjects[i]);
+       // console.log("scene added a siteobject")
+       // console.log(GAME.siteObjects[i].position.y)
         //GAME.platformMeshes.push(GAME.platforms[i].mesh);
     }
-    for(var i = 0; i < GAME.collectibles.length; i++) {
+    /*for(var i = 0; i < GAME.collectibles.length; i++) {
         scene.add(GAME.collectibles[i].mesh);
         //GAME.platformMeshes.push(GAME.platforms[i].mesh);
     }
@@ -238,7 +308,7 @@ GAME.gameplayMode = 0;
                             }
                             for (i = 0; i < GAME.jumpPads.length; i++) {
                             scene.add(GAME.jumpPads[i].mesh);
-                            }
+                            }*/
                             },
                             
                             
@@ -246,7 +316,7 @@ GAME.gameplayMode = 0;
                             render : function() {
    if ( GAME.videos.reel.readyState === GAME.videos.reel.HAVE_ENOUGH_DATA ) {
 
-                                 imageContextD.drawImage( GAME.videos.reel, 0, 0 );
+                                // imageContextD.drawImage( GAME.videos.reel, 0, 0 );
 
                                 if ( textureD ) textureD.needsUpdate = true;
 
@@ -384,7 +454,8 @@ GAME.gameplayMode = 0;
                             }
                             GAME.previousPlatformNumber = GAME.player.platformNumber;
                             
-                            camera.position.z += (targetZ - camera.position.z)*.03;
+                            //camera.position.z += (targetZ - camera.position.z)*.03;
+                            camera.position.z = 5000;
                             if(GAME.keyUp) {
                             var targetVelocityX = 0;
                             if(GAME.player.platformNumber !== -1&&!GAME.player.takingDamage) {

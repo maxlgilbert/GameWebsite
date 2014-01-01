@@ -53,7 +53,7 @@ GAME.ParticleEmitter.prototype.updatePosition = function(){
             particle1.y -= 3*Math.random();
             particle1.y += 4*Math.random()-2;
         }
-        particle1.addSelf(particle1.velocity);
+        particle1.add(particle1.velocity);
     }
 }
 

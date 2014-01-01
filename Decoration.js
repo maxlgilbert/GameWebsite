@@ -52,8 +52,8 @@ GAME.Decoration.prototype = {
         if(this.platform) {
             this.velocity=(this.platform.velocity);
         }
-        this.mesh.position.addSelf(this.velocity);
-        this.position.addSelf(this.velocity);
+        this.mesh.position.add(this.velocity);
+        this.position.add(this.velocity);
     },
 };
 /*

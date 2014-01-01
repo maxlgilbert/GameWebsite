@@ -34,34 +34,32 @@ GAME.Button = function(params){//(x, y, z, width, height, dWidth, dHeight, map, 
 
 GAME.Button.prototype = GAME.clone(GAME.Platform.prototype);
 GAME.Button.prototype.constructor = GAME.Button;
-GAME.Button.prototype.intersect = function() {
-var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[this.number], platform:true});
-    if(interNum===1||interNum===4){
-        if(this.destination){
-            GAME.clearScene();
-            GAME.currentLevel = this.destination;
-            GAME.currentLevel.init();
-        } else {
-            GAME.player.intersected = true;
-            GAME.player.jumps = 0;
-            //targetZ =1000;
-            GAME.player.platformNumber = this.number;
-            var adjust = 0;
-            if (GAME.platforms[this.number].velocity.y>0){
-                GAME.player.velocity.y =0;
-                adjust =GAME.platforms[this.number].velocity.y;
-            } else {
-                GAME.player.velocity.y = GAME.platforms[this.number].velocity.y;
-            }
-            GAME.player.setPosition({x:GAME.player.position.x, y:GAME.platforms[this.number].bounds.top+adjust, z:GAME.player.position.z})
-            GAME.player.setBounds();
-        }
+/*GAME.Button.prototype.intersectPlayer = function(params) {
+//var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[this.number], platform:true});
+//var interNum = GAME.intersects({ object1:GAME.player, object2:this, platform:true});
+var interNum = params.interNum
+//console.log(interNum);
+    if(interNum===2||interNum===0||interNum===3){
+
+    }else if(interNum===1){
+        GAME.player.intersected = true;
+        GAME.player.jumps = 0;
+        //targetZ =1000;
+        GAME.player.platformNumber = this.number;
+        var adjust = GAME.player.height/2;
+        GAME.player.velocity.y = this.velocity.y;
+        //}
+        //GAME.player.setPosition({x:GAME.player.position.x, y:GAME.platforms[this.number].bounds.top+adjust, z:GAME.player.position.z});
+        GAME.player.setPosition({x:GAME.player.position.x, y:this.bounds.top+adjust, z:GAME.player.position.z});
+        
+        GAME.player.setBounds();
         if(this.trigger&&!this.alreadyTriggered){
             this.trigger();
-            //this.alreadyTriggered = true;
+            this.alreadyTriggered = true;
         }
     }
-}
+        
+}*/
 /*GAME.Button.prototype.updatePosition =  function(params) {
     if (this.pathLength!==0){
         if(this.bounds.right > this.path.right) {

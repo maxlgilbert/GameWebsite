@@ -7,7 +7,7 @@
                 <style>
                     body {
                         font-family: Monospace;
-                        background-color: #000000;
+                        background-color: #FFFFFF;
                         margin: 0px;
                         overflow: hidden;
                     }
@@ -15,7 +15,7 @@
                 </head>
 	<body>
         
-		<script src="lib/three 2.js"></script>
+		<script src="lib/Three.js"></script>
 		<script src="lib/Stats.js"></script>
 		<script src="lib/Tween.js"></script>
         <script src="SiteObject.js"></script>
@@ -49,18 +49,17 @@
 
         <script src="lib/js/loaders/OBJLoader.js"></script>
 
-        <video id="sintel"  style="display:none">
-            <source src="Textures/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-        </video>
-        <video id="demoreel" style="display:none">
-            <source src="Textures/demoreel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-        </video>
-		
         
         
 		
 		<script type="text/javascript">
-            
+            //<iframe src="https://docs.google.com/spreadsheet/embeddedform?formkey=dFZ2cTlpakhrLXlyc3lidkRTZGZLREE6MA" width="760" height="1091" frameborder="0" marginheight="0" marginwidth="0" id="form">Loading...</iframe>
+        /*<video id="sintel"  style="display:none">
+            <source src="Textures/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        </video>
+        <video id="demoreel" style="display:none">
+            <source src="Textures/demoreel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        </video>*/
             
 			var container, stats, loader;
             
@@ -86,6 +85,7 @@
             var object = [];
             GAME.intersectsPlatforms = [];
             GAME.videos = [];
+            GAME.form = document.getElementById( 'form' );
 
 
 
@@ -137,7 +137,7 @@
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
                 
-				var info = document.createElement( 'div' );
+				//var info = document.createElement( 'div' );
                 
 				scene = new THREE.Scene();
                 
@@ -154,6 +154,9 @@
                 
 				
                 //scene.add(GAME.player.mesh);
+                GAME.framerate = 60;
+                GAME.keyUp = true;
+                GAME.moveCount = 0;
                 GAME.gameplayMode = 0;
                 GAME.currentLevel = GAME.level1;
                 GAME.videos.sintel = document.getElementById( 'sintel' );
@@ -264,18 +267,18 @@
 
                 } );*/
                 
-               renderer = new THREE.WebGLRenderer({ antialias: true});
+               renderer = new THREE.WebGLRenderer({ antialias: false});
                //renderer = new THREE.CanvasRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setClearColor( 0xffffff, 1 );
                 
-                
+                GAME.renderer = renderer;
 				container.appendChild( renderer.domElement );
                 
 				stats = new Stats();
 				stats.domElement.style.position = 'absolute';
 				stats.domElement.style.top = '0px';
 				container.appendChild( stats.domElement );
-                
                 
                 
                 document.addEventListener( 'mousemove', onDocumentMouseMove, true );
@@ -297,24 +300,23 @@
                 //if (mouseBool) {
                 dX = mouseX - tempX;
                 dY = mouseY - tempY;
-
-                
+                GAME.prevCount = GAME.moveCount
+                GAME.moveCount++;
                 //}
                 if (GAME.intersectsPlatforms.length > 0) {
                     //GAME.intersectsPlatforms[0].object.setPosition({ x:mouseX , y:mouseY , z:0 });
-                    GAME.intersectsPlatforms[0].movePosition({ x:dX/2 , y:dY/2 , z:0 });
-                    //console.log(GAME.player.platformNumber);
-                    //console.log(GAME.intersectsPlatforms[0].object.number);
-                    if(GAME.intersectsPlatforms[0].number == GAME.player.platformNumber) {
-                        //GAME.player.movePosition({x:dX,y:dY,z:0});
-                        //GAME.player.jumpPlayer({jump:2*targetdY});
+                   // console.log("HEL:L");
+                    for (var i = 0; i < GAME.intersectsPlatforms.length;i++){
+                        GAME.intersectsPlatforms[i].object.movePosition({ x:2*dX , y:2*dY , z:0 });
+                        //GAME.intersectsPlatforms[i].object.velocity.x += dX/10;
+                        //GAME.intersectsPlatforms[i].object.velocity.y += dY/10;
                     }
                 }
                 
             }
             
             function onDocumentMouseDown( event ) {
-                event.preventDefault();
+               /* event.preventDefault();
                 
                 
                 var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
@@ -324,7 +326,7 @@
                 var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
 
                 
-                GAME.intersectsPlatforms = [];
+                GAME.intersectsPlatforms = ray.intersectObjects( GAME.platforms);
                 for(var i =0; i < GAME.platforms.length; i++){
                     if(ray.intersectObject( GAME.platforms[i].mesh).length > 0){
                         //console.log(i);
@@ -333,14 +335,52 @@
                 }
                 
                 if (GAME.intersectsPlatforms.length > 0) {
-                   // console.log("hello");
+                   console.log("hello");
+                }*/
+
+                event.preventDefault();
+                
+                /*
+                var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+                //projector.unprojectVector( vector, camera );
+                GAME.intersectsPlatforms = [];
+                var ray = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+                for(var i =0; i < GAME.platforms.length; i++){
+                    if(GAME.platforms[i].mesh){
+                        if(ray.intersectObject( GAME.platforms[i].mesh).length > 0){
+                            console.log(i);
+                            GAME.intersectsPlatforms.push(GAME.platforms[i]);
+                        }
+                    }
+                }*/
+
+                 var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+                projector.unprojectVector( vector, camera );
+                
+                var ray = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+                
+                GAME.intersectsPlatforms = ray.intersectObjects( GAME.siteObjects);
+                for(var i =0; i <GAME.intersectsPlatforms.length; i++){
+                    GAME.intersectsPlatforms[i].object.held = true;
+                    //GAME.intersectsPlatforms[i].object.clicked();
+
+                }
+                //GAME.intersectsPlatforms = ray.intersectObjects( GAME.intersectsPlatforms);
+                
+                if (GAME.intersectsPlatforms.length > 0) {
+                    console.log("hello");
                 }
                 
             }
 
             function onDocumentMouseUp( event ) {
 
-                
+                for(var i =0; i <GAME.intersectsPlatforms.length; i++){
+                    GAME.intersectsPlatforms[i].object.clicked();
+                    GAME.intersectsPlatforms[i].object.held = false;
+
+                }
                 GAME.intersectsPlatforms = [];
                 
                 
@@ -351,22 +391,28 @@
                 
             }
             function onkeydown( event ) {
-                
                 event.preventDefault();
                 if (event.keyCode === 39) {
+                    GAME.rightIsDown=true;
                     if (!GAME.player.takingDamage){
+                        GAME.player.acceleration.x = 0;
                         GAME.player.movePlayerRight({  speed:12});
                     };
                     GAME.keyUp = false;
                 }
                 if (event.keyCode === 37) {
+                    GAME.leftIsDown=true;
                     if (!GAME.player.takingDamage){
+                        GAME.player.acceleration.x = 0;
                         GAME.player.movePlayerLeft({  speed:12});
                     };
                     GAME.keyUp = false;
                 }
                 if (event.keyCode === 32) {
+
+                    //GAME.keysDown++;
                     if (!GAME.player.takingDamage){
+                        GAME.player.acceleration.x = 0;
                         GAME.player.jumpPlayer({  jump:GAME.player.jumpHeight});
                         //cameraZoom({ zPos:player.jumpHeight, initialZ:camera.position.z, duration:player.jumpHeight*100 });
                         
@@ -379,9 +425,22 @@
             }
             function onkeyup( event ) {
                 event.preventDefault();
-                if (event.keyCode === 39 || event.keyCode === 37) {
+                if (event.keyCode === 39) {
+
+                    GAME.rightIsDown=false;
                     //player.stopPlayer({  });
-                    GAME.keyUp = true;
+                    if(!GAME.rightIsDown&&!GAME.leftIsDown){
+                        GAME.keyUp = true;
+                    }
+                }
+                 if (event.keyCode === 37) {
+
+                    GAME.leftIsDown=false;
+                    
+                    //player.stopPlayer({  });
+                    if(!GAME.rightIsDown&&!GAME.leftIsDown){
+                        GAME.keyUp = true;
+                    }
                 }
             }
             /*
@@ -416,7 +475,37 @@
             
 			function render() {
                 if(GAME.loaded){
-                    GAME.currentLevel.render();
+                    GAME.applyGravity({ player:GAME.player});
+                    //GAME.currentLevel.render();
+                    GAME.player.intersected = false;
+                    for(var i = 0; i<GAME.siteObjects.length; i++){
+                        for(var j = i+1; j<GAME.siteObjects.length; j++){
+                            if(i!=j){
+                                var interNum2 = GAME.intersects({ object1:GAME.siteObjects[i], object2:GAME.siteObjects[j] });
+
+                                if(interNum2!=-1){//&&interNum!=4){
+                                    //GAME.collide({object1:GAME.siteObjects[i],object2:GAME.siteObjects[j]})
+                                }
+                            }
+                        }
+
+                        var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.siteObjects[i]});
+                        GAME.siteObjects[i].intersectPlayer({interNum:interNum});
+                    }
+                    GAME.prevCount++;
+                    if (GAME.prevCount>GAME.moveCount){
+                        if (GAME.intersectsPlatforms.length > 0) {
+                            for (var i = 0; i < GAME.intersectsPlatforms.length;i++){
+                                GAME.intersectsPlatforms[i].object.movePosition({ x:0 , y:0 , z:0 });
+                            }
+                        }
+                    }
+
+
+                    for(var i = 0; i<GAME.siteObjects.length; i++){
+                        GAME.siteObjects[i].updatePosition();
+                    }
+                    GAME.player.updatePosition();
                 }
                 /*
                 for (i = 0; i < computers.length; i++) {
@@ -478,11 +567,17 @@
                        }
                 }*/
                 if(GAME.gameplayMode == 0){
+                    //UPDATE!!!!!
+
+
+
+
+
                     //console.log("platformer");
                     targetZ = 5000;
                     light.position.z = 2000;
-                    camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
-                    camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
+                    //camera.position.x += (GAME.player.position.x - camera.position.x)*.05;
+                    //camera.position.y += (GAME.player.position.y - camera.position.y)*.05+500;
                     //camera.position.z += (targetZ - camera.position.z)*.006;
                     /*if(keyUp) {
                         player.velocity.x += (0 - player.velocity.x)*.1;
@@ -495,7 +590,7 @@
                     
                     
     				renderer.render( scene, camera );
-                    camera.position.y-=500;
+                    //camera.position.y-=500;
                 } else if (GAME.gameplayMode == 1){
                     //console.log("flashlight");
                     light.position.z = 10;

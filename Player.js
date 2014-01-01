@@ -5,60 +5,69 @@ var GAME = GAME || {};
 
 
 GAME.Player = function(params){
-    this.position = new THREE.Vector3(params.x, params.y, params.z );
-    this.velocity = new THREE.Vector3(0, 0, 0);
+    GAME.SiteObject.call( this, params );
+    //this.doubleSided = true;
+
+    //this.position = new THREE.Vector3(params.x, params.y, params.z );
+    //this.velocity = new THREE.Vector3(0, 0, 0);
     this.health = params.health;
     this.lives = params.lives;
-    this.width = params.width;
-    this.height = params.height;
+    //this.width = params.width;
+    //this.height = params.height;
     
     this.jumps =0;
-    var plane = new THREE.PlaneGeometry(this.width,this.height);
+    this.bounces = 0;
+    this.jumpHeight = 24;
+    this.intersected = false;
+    this.impededRight = false;
+    this.impededLeft = false;
+    this.takingDamage = false;
+    this.temporaryPowerup = false;
+    this.jumpLevel = 0;
+    this.platformNumber = -1;
+    /*var plane = new THREE.PlaneGeometry(this.width,this.height);
     //this.material = new THREE.MeshPhongMaterial({color: 0xFFFFFF, map: GAME.Textures['player'].threeObj, emissive:0x080808, transparent:true, side:THREE.DoubleSide});
     this.material = new THREE.MeshPhongMaterial({color: 0xAA00FF, emissive:0x080808, transparent:true, side:THREE.DoubleSide});
     this.mesh = new THREE.Mesh(plane, this.material);
     this.mesh.position.set(this.position.x + this.width/2.0, this.position.y + this.height/2.0, this.position.z);
     //this.mesh.rotation.x = Math.PI/2;
     this.mesh.doubleSided = true;
-    this.setBounds();
+    this.setBounds();*/
     
     
 };
-GAME.Player.prototype = {
-    bounces : 0,
-    jumpHeight : 24,
-    intersected : false,
-    impededRight : false,
-    impededLeft : false,
-    takingDamage : false,
-    temporaryPowerup : false,
-    jumpLevel : 0,
-    platformNumber : -1,
-    movePlayerRight : function(params) {
+
+GAME.Player.prototype = GAME.clone(GAME.SiteObject.prototype);
+GAME.Player.prototype.constructor = GAME.Player;
+GAME.Player.prototype.movePlayerRight = function(params) {
         
         if ((!this.intersected||!this.impededRight)) {
             
             this.velocity.x =params.speed;
-            this.mesh.rotation.y = 0;
+            //this.rotation.y = 0;
             this.impededLeft = false;
+
+        this.setBounds();
         }
         //this.intersected = false;
-    },
-    movePlayerLeft : function(params) {
+    }
+GAME.Player.prototype.movePlayerLeft = function(params) {
         if (!this.intersected||!this.impededLeft) {
             this.velocity.x =-params.speed;
-            this.mesh.rotation.y = Math.PI;
+            //this.rotation.y = Math.PI;
             this.impededRight = false;
+
+        this.setBounds();
         }
         //this.intersected = false;
-    },
+    }
     
-    stopPlayer : function(params) {
+GAME.Player.prototype.stopPlayer = function(params) {
         this.velocity.x =0;
         //this.velocity.y =0;
-    },
+    }
     
-    jumpPlayer : function(params) {
+GAME.Player.prototype.jumpPlayer = function(params) {
         if(this.jumps<2){
             this.velocity.y =params.jump;
             this.bounces = 0;
@@ -70,51 +79,23 @@ GAME.Player.prototype = {
             if(params.jump > 8) {
                 //targetZ+=this.jumpHeight*50;
             };
+            
+        this.setBounds();
         }
-    },
-    
-    updatePosition : function(params) {
-        if(this.intersected){
-        //GAME.applyGravity({ player:this});
-        }
-        if(this.intersected&&this.platformNumber!==-1) {
-            //this.stop({});
-            //var platVel = GAME.platforms[this.platformNumber].velocity.y;
-            //this.velocity.y = platVel;
-        } else {
-            GAME.applyGravity({ player:this});
-        }
-        if(this.impeded) {
-            //this.stop({});
-            this.velocity.x = 0;
-        }
-        
-        this.intersected = false;
-        this.platformNumber = -1;
-        //this.platformNumber = -1;
-        /*
-        if(params.newPosition) {
-            this.mesh.position.x = params.newPosition.x + this.width/2;
-            this.mesh.position.y = params.newPosition.y + this.height/2;
-            this.mesh.position.z = params.newPosition.z;
-            this.position=params.newPosition;
-            this.bounds.left= params.newPosition.x;
-            this.bounds.right= params.newPosition.x+this.width;
-            this.bounds.top= params.newPosition.y;
-            this.bounds.bottom= params.newPosition.y + this.height;
-        }*/
-        this.mesh.position.addSelf(this.velocity);
-        this.position.addSelf(this.velocity);
+    }
+  /*  
+GAME.Player.prototype.updatePosition = function(params) {
+        this.position.add(this.velocity);
         this.bounds.left+= this.velocity.x;
         this.bounds.right+= this.velocity.x;
         this.bounds.top+= this.velocity.y;
         this.bounds.bottom+= this.velocity.y;
-    },
+    }*/
     
-    damage : function(params) {
+    GAME.Player.prototype.damage = function(params) {
         if (!this.takingDamage) {
             GAME.Tracks['damageSFX'].threeObj.play();
-            this.mesh.material.color.setHex(0xFF0000);
+            this.material.color.setHex(0xFF0000);
             this.takingDamage = true;
             if (this.temporaryPowerup) {
                 this.jumpHeight/=1.2;
@@ -124,28 +105,29 @@ GAME.Player.prototype = {
             var damageTween = new TWEEN.Tween({ red: 0, player:this })
             .to({ red:1 }, 150 )
             .onUpdate( function(){
-                    this.player.mesh.material.color.setRGB(1, this.red,this.red);
+                    this.player.material.color.setRGB(1, this.red,this.red);
                     } )
             .onComplete( function(){
                         this.player.takingDamage = false;
                         });
             damageTween.start();
         }
-    },
+    }
     
-    bounds : [],
+    //bounds : [],
     
-    setBounds : function(){
+    /*GAME.Player.prototype.setBounds = function(){
         this.bounds = ({ left:this.position.x, top:this.position.y+this.height, right:this.position.x+this.width, bottom:this.position.y })
-    },
+    }*/
     
-    setPosition : function(params) {
+   /* GAME.Player.prototype.setPosition = function(params) {
         this.position = new THREE.Vector3(params.x, params.y, params.z );
-        this.mesh.position.set(this.position.x+this.width/2.0, this.position.y+this.height/2.0, this.position.z);
+        //this.position.set(this.position.x+this.width/2.0, this.position.y+this.height/2.0, this.position.z);
+        this.position.set(this.position.x, this.position.y, this.position.z);
         this.setBounds();
-    },
+    }*/
 
-    movePosition : function(params) {
+    /*GAME.Player.prototype.movePosition = function(params) {
         this.dX = params.x;
         this.dY = params.y;
         this.bounds.left +=params.x;
@@ -156,10 +138,10 @@ GAME.Player.prototype = {
         this.position.y+=params.y;
         this.position.z+=params.z;
         this.path = ({ left:this.position.x -this.pathLength/2, top:this.position.y + this.height +this.pathLength/2, right:this.position.x + this.width+this.pathLength/2, bottom:this.position.y-this.pathLength/2 });
-    },
+    }*/
     
-    reset : function(params) {
-        if(params.level ===2) {
+   GAME.Player.prototype.reset = function(params) {
+       /*if(params.level ===2) {
             this.height = 161;
             this.mesh = new THREE.Mesh( new THREE.PlaneGeometry(this.width,this.height), this.material);
             //this.mesh.rotation.x = Math.PI/2;
@@ -177,13 +159,11 @@ GAME.Player.prototype = {
             //this.mesh.rotation.x = Math.PI/2;
             this.mesh.doubleSided = true;
             this.mesh.material.map = THREE.ImageUtils.loadTexture('Textures/maincharacter4.png');
-        };
+        };*/
         //this.mesh.material.color.setRGB(1, 1,1);
         this.takingDamage = false;
         this.setPosition({ x:0, y:200, z:0 });
-        scene.add(this.mesh);
+        scene.add(this);
         scene.add(light);
     }
-    
-};
     

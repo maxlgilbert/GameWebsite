@@ -67,24 +67,61 @@ GAME.Platform = function(params){//(x, y, z, width, height, dWidth, dHeight, map
 
 GAME.Platform.prototype = GAME.clone(GAME.SiteObject.prototype);
 GAME.Platform.prototype.constructor = GAME.Platform;
-GAME.Platform.prototype.intersect = function() {
-var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[this.number], platform:true});
+GAME.Platform.prototype.intersectPlayer = function(params) {
+//var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[this.number], platform:true});
+//var interNum = GAME.intersects({ object1:GAME.player, object2:this, platform:true});
+var interNum = params.interNum
+//console.log(interNum);
+    /*if(interNum==0||interNum==2||interNum==3||interNum==4){
+        GAME.collide({object1:GAME.player, object2:this});
 
-    //console.log("HELLLOOOO?Platform");
-    if(interNum===1||interNum===4){
+        this.setBounds();
+        GAME.player.setBounds();
+    }else*/ if(interNum===1){
         GAME.player.intersected = true;
         GAME.player.jumps = 0;
         //targetZ =1000;
         GAME.player.platformNumber = this.number;
-        var adjust = 0;
-        if (GAME.platforms[this.number].velocity.y>0){
+        var adjust = GAME.player.height/2;
+       /* if (GAME.platforms[this.number].velocity.y>0){
             GAME.player.velocity.y =0;
             adjust =GAME.platforms[this.number].velocity.y;
-        } else {
-            GAME.player.velocity.y = GAME.platforms[this.number].velocity.y;
+        } else {*/
+            //GAME.player.velocity.y = GAME.platforms[this.number].velocity.y;
+       
+        GAME.player.velocity.y = this.velocity.y;
+        if(GAME.player.velocity.y <0){
+            GAME.player.velocity.y = 0;
         }
-        GAME.player.setPosition({x:GAME.player.position.x, y:GAME.platforms[this.number].bounds.top+adjust, z:GAME.player.position.z})
+        //}
+        //GAME.player.setPosition({x:GAME.player.position.x, y:GAME.platforms[this.number].bounds.top+adjust, z:GAME.player.position.z});
+        GAME.player.setPosition({x:GAME.player.position.x, y:this.bounds.top+adjust, z:GAME.player.position.z});
+        
         GAME.player.setBounds();
+        if(GAME.keyUp){
+            GAME.friction({object1:GAME.player});
+        }
+         if(this.trigger){//&&!this.alreadyTriggered){
+            //this.trigger();
+            //this.alreadyTriggered = true;
+        }
+    } else if(interNum===0){
+        GAME.player.acceleration.x = 0;
+        var adjust = GAME.player.width/2;
+        GAME.player.velocity.x = this.velocity.x;
+        GAME.player.setPosition({x:this.bounds.left-adjust, y:GAME.player.position.y, z:GAME.player.position.z});
+        
+        GAME.player.setBounds();
+    }else if(interNum===2){
+        GAME.player.acceleration.x = 0;
+        var adjust = GAME.player.width/2;
+        GAME.player.velocity.x = this.velocity.x;
+        GAME.player.setPosition({x:this.bounds.right+adjust, y:GAME.player.position.y, z:GAME.player.position.z});
+        
+        GAME.player.setBounds();
+    }
+    if(!GAME.player.intersected){
+        GAME.player.acceleration.x = 0;
     }
 }
 /*GAME.Platform.prototype.updatePosition =  function(params) {
@@ -117,16 +154,13 @@ var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[thi
             this.velocity.y*=-1;
         };*/
     //};
-    GAME.Platform.prototype.setPosition = function(params) {
-        this.bounds.left =params.x;
-        this.bounds.right =params.x+this.width;
-        this.bounds.top =params.y+this.height;
-        this.bounds.bottom =params.y;
+    /*GAME.Platform.prototype.setPosition = function(params) {
+        
         this.position = new THREE.Vector3(params.x, params.y, params.z );
         
         //this.setBounds();
-    };
-    GAME.Platform.prototype.movePosition = function(params) {
+    };*/
+   /* GAME.Platform.prototype.movePosition = function(params) {
         this.dX = params.x;
         this.dY = params.y;
         this.bounds.left +=params.x;
@@ -138,10 +172,10 @@ var interNum = GAME.intersects({ object1:GAME.player, object2:GAME.platforms[thi
         this.position.z+=params.z;
         this.path = ({ left:this.position.x -this.pathLength/2, top:this.position.y + this.height +this.pathLength/2, right:this.position.x + this.width+this.pathLength/2, bottom:this.position.y-this.pathLength/2 });
         //this.mesh.setPosition(this.position
-        /*this.velocity.x = params.x;
-        this.velocity.y = params.y;*/
+        //this.velocity.x = params.x;
+        //this.velocity.y = params.y;
         
         //this.setBounds();
-    };
+    };*/
 
     
